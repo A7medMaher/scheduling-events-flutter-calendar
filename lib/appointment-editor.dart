@@ -284,6 +284,33 @@ class AppointmentEditorState extends State<AppointmentEditor> {
               height: 1.0,
               thickness: 1,
             ),
+            ListTile(
+              contentPadding: const EdgeInsets.all(5),
+              leading: Icon(
+                Icons.subject,
+                color: Colors.black87,
+              ),
+              title: TextField(
+                controller: TextEditingController(text: _test11),
+                onChanged: (String value) {
+                  _test11 = value;
+                },
+                keyboardType: TextInputType.multiline,
+                maxLines: null,
+                style: TextStyle(
+                    fontSize: 18,
+                    color: Colors.black87,
+                    fontWeight: FontWeight.w400),
+                decoration: InputDecoration(
+                  border: InputBorder.none,
+                  hintText: 'Add test11',
+                ),
+              ),
+            ),
+            const Divider(
+              height: 1.0,
+              thickness: 1,
+            ),
           ],
         ));
   }
@@ -321,26 +348,44 @@ class AppointmentEditorState extends State<AppointmentEditor> {
                             <Meeting>[]..add(_selectedAppointment));
                       }
                       meetings.add(Meeting(
-                        from: _startDate,
-                        to: _endDate,
-                        background: _colorCollection[_selectedColorIndex],
-                        startTimeZone: _selectedTimeZoneIndex == 0
-                            ? ''
-                            : _timeZoneCollection[_selectedTimeZoneIndex],
-                        endTimeZone: _selectedTimeZoneIndex == 0
-                            ? ''
-                            : _timeZoneCollection[_selectedTimeZoneIndex],
-                        description: _notes,
-                        isAllDay: _isAllDay,
-                        eventName: _subject == '' ? '(No title)' : _subject,
-                      ));
+                          from: _startDate,
+                          to: _endDate,
+                          background: _colorCollection[_selectedColorIndex],
+                          startTimeZone: _selectedTimeZoneIndex == 0
+                              ? ''
+                              : _timeZoneCollection[_selectedTimeZoneIndex],
+                          endTimeZone: _selectedTimeZoneIndex == 0
+                              ? ''
+                              : _timeZoneCollection[_selectedTimeZoneIndex],
+                          description: _notes,
+                          isAllDay: _isAllDay,
+                          eventName: _subject == '' ? '(No title)' : _subject,
+                          test11: _test11));
 
                       _events.appointments.add(meetings[0]);
 
                       _events.notifyListeners(
                           CalendarDataSourceAction.add, meetings);
                       _selectedAppointment = null;
+                      print(meetings[0].from);
+                      print(meetings[0].to);
+                      print(meetings[0].description);
 
+                      // print(widget.appointment[0].location);
+                      // print(widget.appointment[0].notes);
+                      // widget.appointment[0].resourceIds.forEach((element) {
+                      //   // print(element);
+                      //   print(widget
+                      //       .events.resources[int.parse(element)].displayName);
+                      //   handleposttodatabase(
+                      //       desc: widget.appointment[0].subject,
+                      //       location: widget.appointment[0].location,
+                      //       provider: widget.events
+                      //           .resources[int.parse(element)].displayName,
+                      //       notes: widget.appointment[0].notes,
+                      //       eTime: widget.appointment[0].endTime,
+                      //       sTime: widget.appointment[0].startTime);
+                      // });
                       Navigator.pop(context);
                     })
               ],

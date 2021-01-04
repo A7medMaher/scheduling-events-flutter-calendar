@@ -38,6 +38,7 @@ TimeOfDay _endTime;
 bool _isAllDay;
 String _subject = '';
 String _notes = '';
+String _test11 = '';
 
 class EventCalendarState extends State<EventCalendar> {
   EventCalendarState();
@@ -48,7 +49,7 @@ class EventCalendarState extends State<EventCalendar> {
 
   @override
   void initState() {
-    _calendarView = CalendarView.month;
+    _calendarView = CalendarView.timelineWeek;
     appointments = getMeetingDetails();
     _events = DataSource(appointments);
     _selectedAppointment = null;
@@ -56,6 +57,7 @@ class EventCalendarState extends State<EventCalendar> {
     _selectedTimeZoneIndex = 0;
     _subject = '';
     _notes = '';
+    _test11 = '';
     super.initState();
   }
 
@@ -136,6 +138,7 @@ class EventCalendarState extends State<EventCalendar> {
               ? ''
               : meetingDetails.eventName;
           _notes = meetingDetails.description;
+          _test11 = meetingDetails.test11;
           _selectedAppointment = meetingDetails;
         } else {
           final DateTime date = calendarTapDetails.date;
@@ -362,7 +365,8 @@ class Meeting {
       this.eventName = '',
       this.startTimeZone = '',
       this.endTimeZone = '',
-      this.description = ''});
+      this.description = '',
+      this.test11 = ''});
 
   final String eventName;
   final DateTime from;
@@ -372,4 +376,5 @@ class Meeting {
   final String startTimeZone;
   final String endTimeZone;
   final String description;
+  final String test11;
 }
