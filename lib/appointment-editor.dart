@@ -6,7 +6,12 @@ class AppointmentEditor extends StatefulWidget {
 }
 
 class AppointmentEditorState extends State<AppointmentEditor> {
+  List<CalendarResource> _selectedResources = _events.resources;
+  List<CalendarResource> _unSelectedResources = [];
   Widget _getAppointmentEditor(BuildContext context) {
+    print('From editor');
+    // print(_selectedAppointment.resourceIds;
+    // print(_events.resources);
     return Container(
         color: Colors.white,
         child: ListView(
@@ -311,12 +316,179 @@ class AppointmentEditorState extends State<AppointmentEditor> {
               height: 1.0,
               thickness: 1,
             ),
+            _resourceIds == null || _resourceIds.isEmpty
+                ? Container()
+                : ListTile(
+                    leading: Icon(
+                      Icons.people,
+                      size: 20,
+                      color: Colors.blueGrey,
+                    ),
+                    title: Text(
+                        _getSelectedResourceText(
+                            _resourceIds, _events.resources),
+                        style: TextStyle(
+                            fontSize: 15,
+                            color: Colors.red,
+                            fontWeight: FontWeight.w400)),
+                  ),
+            SizedBox(
+              height: 10,
+            ),
+            _events.resources == null || _events.resources.isEmpty
+                ? Container()
+                : Container(
+                    margin: EdgeInsets.only(bottom: 5),
+                    height: 50,
+                    child: ListTile(
+                      leading: Container(
+                          width: 30,
+                          alignment: Alignment.centerRight,
+                          child: Icon(
+                            Icons.people,
+                            color: Colors.teal,
+                            size: 20,
+                          )),
+                      title: RawMaterialButton(
+                        padding: const EdgeInsets.only(left: 5),
+                        child: Container(
+                          alignment: Alignment.centerLeft,
+                          child: _getResourceEditor(TextStyle(
+                              fontSize: 15,
+                              color: Colors.black87,
+                              fontWeight: FontWeight.w300)),
+                        ),
+                        onPressed: () {
+                          showDialog<Widget>(
+                            context: context,
+                            barrierDismissible: true,
+                            builder: (BuildContext context) {
+                              return _ResourcePicker(
+                                _unSelectedResources,
+                                onChanged: (_PickerChangedDetails details) {
+                                  _resourceIds == null
+                                      ? _resourceIds = <Object>[
+                                          details.resourceId
+                                        ]
+                                      : _resourceIds.add(details.resourceId);
+                                  _selectedResources = _getSelectedResources(
+                                      _resourceIds, _events.resources);
+                                  _unSelectedResources =
+                                      _getUnSelectedResources(
+                                          _selectedResources,
+                                          _events.resources);
+                                },
+                              );
+                            },
+                          ).then((dynamic value) => setState(() {
+                                /// update the color picker changes
+                              }));
+                        },
+                      ),
+                    )),
           ],
         ));
   }
 
+  /// Returns the selected resources based on the id collection passed
+  List<CalendarResource> _getSelectedResources(
+      List<Object> _resourceIds, List<CalendarResource> resourceCollection) {
+    if (_resourceIds == null || _resourceIds.isEmpty) {
+      return null;
+    }
+
+    final List<CalendarResource> _selectedResources = <CalendarResource>[];
+    for (int i = 0; i < _resourceIds.length; i++) {
+      final CalendarResource resourceName =
+          _getResourceFromId(_resourceIds[i], resourceCollection);
+      _selectedResources.add(resourceName);
+    }
+
+    return _selectedResources;
+  }
+
+  /// Returns the resource from the id passed.
+  CalendarResource _getResourceFromId(
+      Object resourceId, List<CalendarResource> resourceCollection) {
+    return resourceCollection
+        .firstWhere((resource) => resource.id == resourceId);
+  }
+
+  /// Returns the available resource, by filtering the resource collection from
+  /// the selected resource collection.
+  List<CalendarResource> _getUnSelectedResources(
+      List<CalendarResource> selectedResources,
+      List<CalendarResource> resourceCollection) {
+    if (selectedResources == null || selectedResources.isEmpty) {
+      return resourceCollection;
+    }
+
+    List<CalendarResource> collection = resourceCollection.sublist(0);
+    for (int i = 0; i < resourceCollection.length; i++) {
+      final CalendarResource resource = resourceCollection[i];
+      for (int j = 0; j < selectedResources.length; j++) {
+        final CalendarResource selectedResource = selectedResources[j];
+        if (resource.id == selectedResource.id) {
+          collection.remove(resource);
+        }
+      }
+    }
+
+    return collection;
+  }
+
+  String _getSelectedResourceText(
+      List<Object> resourceIds, List<CalendarResource> resourceCollection) {
+    String resourceNames;
+    for (int i = 0; i < resourceIds.length; i++) {
+      final String name = resourceCollection
+          .firstWhere((resource) => resource.id == resourceIds[i])
+          .displayName;
+      resourceNames =
+          resourceNames == null ? name : resourceNames + ', ' + name;
+    }
+
+    return resourceNames;
+  }
+
+  Widget _getResourceEditor([TextStyle hintTextStyle]) {
+    if (_selectedResources == null || _selectedResources.isEmpty) {
+      return Text('Add people', style: hintTextStyle);
+    }
+
+    List<Widget> chipWidgets = <Widget>[];
+    for (int i = 0; i < _selectedResources.length; i++) {
+      final CalendarResource selectedResource = _selectedResources[i];
+      chipWidgets.add(Chip(
+        padding: EdgeInsets.only(left: 0),
+        avatar: CircleAvatar(
+          backgroundColor: Color.fromRGBO(0, 116, 227, 1),
+          backgroundImage: selectedResource.image,
+          child: selectedResource.image == null
+              ? Text(selectedResource.displayName[0])
+              : null,
+        ),
+        label: Text(selectedResource.displayName),
+        onDeleted: () {
+          _selectedResources.removeAt(i);
+          _resourceIds.removeAt(i);
+          _unSelectedResources =
+              _getUnSelectedResources(_selectedResources, _events.resources);
+          setState(() {});
+        },
+      ));
+    }
+
+    return Wrap(
+      spacing: 6.0,
+      runSpacing: 6.0,
+      children: chipWidgets,
+    );
+  }
+
   @override
   Widget build([BuildContext context]) {
+    // print(_resourceIds[0]);
     return MaterialApp(
         debugShowCheckedModeBanner: false,
         home: Scaffold(
@@ -360,7 +532,8 @@ class AppointmentEditorState extends State<AppointmentEditor> {
                           description: _notes,
                           isAllDay: _isAllDay,
                           eventName: _subject == '' ? '(No title)' : _subject,
-                          test11: _test11));
+                          test11: _test11,
+                          resourceIds: ['0001', '0002']));
 
                       _events.appointments.add(meetings[0]);
 
@@ -418,4 +591,76 @@ class AppointmentEditorState extends State<AppointmentEditor> {
   String getTile() {
     return _subject.isEmpty ? 'New event' : 'Event details';
   }
+}
+
+/// Signature for callback which reports the picker value changed
+typedef _PickerChanged = void Function(
+    _PickerChangedDetails pickerChangedDetails);
+
+/// Picker to display the available resource collection, and returns the
+/// selected resource id.
+class _ResourcePicker extends StatefulWidget {
+  _ResourcePicker(this.resourceCollection, {this.onChanged});
+
+  final List<CalendarResource> resourceCollection;
+
+  final _PickerChanged onChanged;
+
+  @override
+  State<StatefulWidget> createState() => _ResourcePickerState();
+}
+
+class _ResourcePickerState extends State<_ResourcePicker> {
+  @override
+  Widget build(BuildContext context) {
+    return Theme(
+        data: ThemeData.light(),
+        child: AlertDialog(
+          content: Container(
+              width: 500,
+              height: (widget.resourceCollection.length * 50).toDouble(),
+              child: ListView.builder(
+                padding: const EdgeInsets.all(0),
+                itemCount: widget.resourceCollection.length,
+                itemBuilder: (BuildContext context, int index) {
+                  final CalendarResource resource =
+                      widget.resourceCollection[index];
+                  return Container(
+                      height: 50,
+                      child: ListTile(
+                        contentPadding:
+                            const EdgeInsets.symmetric(horizontal: 10),
+                        leading: CircleAvatar(
+                          backgroundColor: Color.fromRGBO(0, 116, 227, 1),
+                          backgroundImage: resource.image,
+                          child: resource.image == null
+                              ? Text(resource.displayName[0])
+                              : null,
+                        ),
+                        title: Text(resource.displayName),
+                        onTap: () {
+                          setState(() {
+                            widget.onChanged(
+                                _PickerChangedDetails(resourceId: resource.id));
+                          });
+
+                          // ignore: always_specify_types
+                          Future.delayed(const Duration(milliseconds: 200), () {
+                            // When task is over, close the dialog
+                            Navigator.pop(context);
+                          });
+                        },
+                      ));
+                },
+              )),
+        ));
+  }
+}
+
+class _PickerChangedDetails {
+  _PickerChangedDetails({this.index, this.resourceId});
+
+  final int index;
+
+  final Object resourceId;
 }
