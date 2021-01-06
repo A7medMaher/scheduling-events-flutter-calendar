@@ -2,7 +2,9 @@ library event_calendar;
 
 // import 'choice.dart' as choices;
 import 'dart:math';
+import 'package:easy_dialog/easy_dialog.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_xlider/flutter_xlider.dart';
 import 'package:intl/intl.dart';
 import 'package:smart_select/smart_select.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
@@ -49,30 +51,43 @@ class EventCalendarState extends State<EventCalendar> {
   EventCalendarState();
 
   CalendarView _calendarView;
+  CalendarController _calendarController;
   List<String> eventNameCollection;
   // List<Meeting> appointments;
+  final List<CalendarView> _allowedViews = <CalendarView>[
+    CalendarView.timelineDay,
+    CalendarView.timelineWeek,
+    CalendarView.timelineWorkWeek,
+    CalendarView.timelineMonth
+  ];
   List<Meeting> appointments = [
     Meeting(
         from: DateTime.now(),
         to: DateTime.now().add(Duration(hours: 1)),
         background: Colors.teal,
         description: 'Test',
-        resourceIds: <String>['0001', '0002'])
+        resourceIds: <String>['0001', '0002', '0003', '0004'])
   ];
 
   List<CalendarResource> _employeeCollection = [
     CalendarResource(id: '0001', displayName: 'Ahmed', color: Colors.red),
-    CalendarResource(id: '0002', displayName: 'Ali', color: Colors.teal)
+    CalendarResource(id: '0002', displayName: 'Ali', color: Colors.teal),
+    CalendarResource(id: '0003', displayName: 'Omar', color: Colors.blue),
+    CalendarResource(id: '0004', displayName: 'Sami', color: Colors.yellow)
   ];
-
+  double cellWidth = -2;
   @override
   void initState() {
-    _calendarView = CalendarView.timelineWeek;
+    // _calendarView = CalendarView.timelineWeek;
+    _calendarController = CalendarController();
+    _calendarController.view = CalendarView.timelineWeek;
     //  appointments = getMeetingDetails();
     _events = DataSource(appointments, _employeeCollection);
     allemolyees = [
       S2Choice<String>(value: '0001', title: 'Ahmed'),
       S2Choice<String>(value: '0002', title: 'Ali'),
+      S2Choice<String>(value: '0003', title: 'Omar'),
+      S2Choice<String>(value: '0004', title: 'Sami'),
     ];
     _selectedAppointment = null;
     _selectedColorIndex = 0;
@@ -91,17 +106,51 @@ class EventCalendarState extends State<EventCalendar> {
     return Scaffold(
         resizeToAvoidBottomInset: false,
         resizeToAvoidBottomPadding: false,
+        appBar: AppBar(
+          backgroundColor: Colors.teal,
+          actions: [
+            IconButton(
+              icon: Icon(Icons.settings),
+              onPressed: () {
+                EasyDialog(
+                    fogOpacity: 0.1,
+                    height: 600,
+                    title: Text("Basic Easy Dialog Title"),
+                    description: Text("This is a basic dialog"),
+                    contentList: [
+                      FlutterSlider(
+                        values: [cellWidth],
+                        max: 300,
+                        min: -3,
+                        onDragging: (handlerIndex, lowerValue, upperValue) {
+                          print(lowerValue);
+                          // _upperValue = upperValue;
+                          setState(() {
+                            cellWidth = lowerValue;
+                          });
+                        },
+                      )
+                      // Container(
+                      //   color: Colors.red,
+                      //   height: 150,
+                      // )
+                    ]).show(context);
+              },
+            )
+          ],
+        ),
         body: Padding(
             padding: const EdgeInsets.fromLTRB(5, 0, 5, 5),
-            child: getEventCalendar(_calendarView, _events, onCalendarTapped)));
+            child: getEventCalendar(_events, onCalendarTapped)));
   }
 
   SfCalendar getEventCalendar(
-      [CalendarView _calendarView,
-      CalendarDataSource _calendarDataSource,
+      [CalendarDataSource _calendarDataSource,
       CalendarTapCallback calendarTapCallback]) {
     return SfCalendar(
-        view: _calendarView,
+        // view: _calendarView,
+        controller: _calendarController,
+        allowedViews: _allowedViews,
         dataSource: _calendarDataSource,
         onTap: calendarTapCallback,
         initialDisplayDate: DateTime(DateTime.now().year, DateTime.now().month,
@@ -109,6 +158,8 @@ class EventCalendarState extends State<EventCalendar> {
         monthViewSettings: MonthViewSettings(
             appointmentDisplayMode: MonthAppointmentDisplayMode.appointment),
         timeSlotViewSettings: TimeSlotViewSettings(
+            timeIntervalWidth: cellWidth,
+            timeIntervalHeight: 50,
             minimumAppointmentDuration: const Duration(minutes: 60)));
   }
 
