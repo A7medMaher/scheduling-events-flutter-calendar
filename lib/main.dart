@@ -1,8 +1,10 @@
 library event_calendar;
 
+// import 'choice.dart' as choices;
 import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:smart_select/smart_select.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 
 part 'color-picker.dart';
@@ -40,6 +42,8 @@ String _subject = '';
 String _notes = '';
 String _test11 = '';
 List<Object> _resourceIds;
+List<S2Choice<String>> allemolyees = [];
+List<String> _prov = [];
 
 class EventCalendarState extends State<EventCalendar> {
   EventCalendarState();
@@ -66,6 +70,10 @@ class EventCalendarState extends State<EventCalendar> {
     _calendarView = CalendarView.timelineWeek;
     //  appointments = getMeetingDetails();
     _events = DataSource(appointments, _employeeCollection);
+    allemolyees = [
+      S2Choice<String>(value: '0001', title: 'Ahmed'),
+      S2Choice<String>(value: '0002', title: 'Ali'),
+    ];
     _selectedAppointment = null;
     _selectedColorIndex = 0;
     _selectedTimeZoneIndex = 0;
@@ -138,6 +146,7 @@ class EventCalendarState extends State<EventCalendar> {
       _subject = '';
       _notes = '';
       _resourceIds = [];
+      _prov = [];
       if (_calendarView == CalendarView.month) {
         _calendarView = CalendarView.day;
       } else {
@@ -160,19 +169,39 @@ class EventCalendarState extends State<EventCalendar> {
           _notes = meetingDetails.description;
           _test11 = meetingDetails.test11;
           _selectedAppointment = meetingDetails;
+          _resourceIds = <Object>[calendarTapDetails.resource.id];
+          _resourceIds.forEach((element) {
+            _prov.add(element.toString());
+          });
         } else {
+          _resourceIds = <Object>[calendarTapDetails.resource.id];
+          _resourceIds.forEach((element) {
+            _prov.add(element.toString());
+          });
+          // print(_selectedAppointment.resourceIds.length);
           final DateTime date = calendarTapDetails.date;
           _startDate = date;
           _endDate = date.add(const Duration(hours: 1));
         }
-        _resourceIds = <Object>[calendarTapDetails.resource.id];
+        if (_selectedAppointment != null) {
+          print(_selectedAppointment.resourceIds.length);
+          _selectedAppointment.resourceIds.forEach((element) {
+            _prov.add(element.toString());
+          });
+        }
+        // _resourceIds = <Object>[calendarTapDetails.resource.id];
+        // _resourceIds.forEach((element) {
+        //   _prov.add(element.toString());
+        // });
         // print(_resourceIds[0]);
         ////_selectedAppointment.resourceIds===_resourceIds
         print('from call');
-        print(_events.resources);
+        // print(_events.resources.length);
+
         _startTime =
             TimeOfDay(hour: _startDate.hour, minute: _startDate.minute);
         _endTime = TimeOfDay(hour: _endDate.hour, minute: _endDate.minute);
+
         Navigator.push<Widget>(
           context,
           MaterialPageRoute(
