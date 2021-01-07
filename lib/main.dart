@@ -28,8 +28,15 @@ class EventCalendar extends StatefulWidget {
   EventCalendarState createState() => EventCalendarState();
 }
 
-List<Color> _colorCollection = [Colors.red, Colors.blue, Colors.green];
-List<String> _colorNames = ['Red', 'Blue', 'Green'];
+List<Color> _colorCollection = [
+  Colors.red,
+  Colors.blue,
+  Colors.green,
+  Colors.black,
+  Colors.yellow,
+  Colors.pink
+];
+List<String> _colorNames = ['Red', 'Blue', 'Green', 'Black', 'Yellow', 'Pink'];
 int _selectedColorIndex = 0;
 int _selectedTimeZoneIndex = 0;
 List<String> _timeZoneCollection = ['Arab Standard Time'];
@@ -121,7 +128,7 @@ class EventCalendarState extends State<EventCalendar> {
                       FlutterSlider(
                         values: [cellWidth],
                         max: 300,
-                        min: -3,
+                        min: 0,
                         onDragging: (handlerIndex, lowerValue, upperValue) {
                           print(lowerValue);
                           // _upperValue = upperValue;
@@ -148,19 +155,20 @@ class EventCalendarState extends State<EventCalendar> {
       [CalendarDataSource _calendarDataSource,
       CalendarTapCallback calendarTapCallback]) {
     return SfCalendar(
-        // view: _calendarView,
-        controller: _calendarController,
-        allowedViews: _allowedViews,
-        dataSource: _calendarDataSource,
-        onTap: calendarTapCallback,
-        initialDisplayDate: DateTime(DateTime.now().year, DateTime.now().month,
-            DateTime.now().day, 0, 0, 0),
-        monthViewSettings: MonthViewSettings(
-            appointmentDisplayMode: MonthAppointmentDisplayMode.appointment),
-        timeSlotViewSettings: TimeSlotViewSettings(
-            timeIntervalWidth: cellWidth,
-            timeIntervalHeight: 50,
-            minimumAppointmentDuration: const Duration(minutes: 60)));
+      // view: _calendarView,
+      controller: _calendarController,
+      allowedViews: _allowedViews,
+      dataSource: _calendarDataSource,
+      onTap: calendarTapCallback,
+      initialDisplayDate: DateTime(DateTime.now().year, DateTime.now().month,
+          DateTime.now().day, 0, 0, 0),
+      monthViewSettings: MonthViewSettings(
+          appointmentDisplayMode: MonthAppointmentDisplayMode.appointment),
+      // timeSlotViewSettings: TimeSlotViewSettings(
+      //     timeIntervalWidth: cellWidth,
+      //     timeIntervalHeight: 50,
+      //     minimumAppointmentDuration: const Duration(minutes: 60)),
+    );
   }
 
   void onCalendarViewChange(String value) {
@@ -196,6 +204,7 @@ class EventCalendarState extends State<EventCalendar> {
       _selectedTimeZoneIndex = 0;
       _subject = '';
       _notes = '';
+      _test11 = '';
       _resourceIds = [];
       _prov = [];
       if (_calendarView == CalendarView.month) {
