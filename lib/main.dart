@@ -196,6 +196,12 @@ class EventCalendarState extends State<EventCalendar> {
         calendarTapDetails.targetElement != CalendarElement.appointment) {
       return;
     }
+    // print(calendarTapDetails.resource.);
+    print('rrr');
+    _events.appointments?.forEach((element) {
+      print(element.to.difference(element.from).inSeconds);
+    });
+    print('ccc');
 
     setState(() {
       _selectedAppointment = null;
@@ -270,174 +276,6 @@ class EventCalendarState extends State<EventCalendar> {
       }
     });
   }
-
-  // List<Meeting> getMeetingDetails() {
-  //   final List<Meeting> meetingCollection = <Meeting>[];
-  //   eventNameCollection = <String>[];
-  //   eventNameCollection.add('General Meeting');
-  //   eventNameCollection.add('Plan Execution');
-  //   eventNameCollection.add('Project Plan');
-  //   eventNameCollection.add('Consulting');
-  //   eventNameCollection.add('Support');
-  //   eventNameCollection.add('Development Meeting');
-  //   eventNameCollection.add('Scrum');
-  //   eventNameCollection.add('Project Completion');
-  //   eventNameCollection.add('Release updates');
-  //   eventNameCollection.add('Performance Check');
-
-  //   _colorCollection = <Color>[];
-  //   _colorCollection.add(const Color(0xFF0F8644));
-  //   _colorCollection.add(const Color(0xFF8B1FA9));
-  //   _colorCollection.add(const Color(0xFFD20100));
-  //   _colorCollection.add(const Color(0xFFFC571D));
-  //   _colorCollection.add(const Color(0xFF85461E));
-  //   _colorCollection.add(const Color(0xFFFF00FF));
-  //   _colorCollection.add(const Color(0xFF3D4FB5));
-  //   _colorCollection.add(const Color(0xFFE47C73));
-  //   _colorCollection.add(const Color(0xFF636363));
-
-  //   _colorNames = <String>[];
-  //   _colorNames.add('Green');
-  //   _colorNames.add('Purple');
-  //   _colorNames.add('Red');
-  //   _colorNames.add('Orange');
-  //   _colorNames.add('Caramel');
-  //   _colorNames.add('Magenta');
-  //   _colorNames.add('Blue');
-  //   _colorNames.add('Peach');
-  //   _colorNames.add('Gray');
-
-  //   _timeZoneCollection = <String>[];
-  //   _timeZoneCollection.add('Default Time');
-  //   _timeZoneCollection.add('AUS Central Standard Time');
-  //   _timeZoneCollection.add('AUS Eastern Standard Time');
-  //   _timeZoneCollection.add('Afghanistan Standard Time');
-  //   _timeZoneCollection.add('Alaskan Standard Time');
-  //   _timeZoneCollection.add('Arab Standard Time');
-  //   _timeZoneCollection.add('Arabian Standard Time');
-  //   _timeZoneCollection.add('Arabic Standard Time');
-  //   _timeZoneCollection.add('Argentina Standard Time');
-  //   _timeZoneCollection.add('Atlantic Standard Time');
-  //   _timeZoneCollection.add('Azerbaijan Standard Time');
-  //   _timeZoneCollection.add('Azores Standard Time');
-  //   _timeZoneCollection.add('Bahia Standard Time');
-  //   _timeZoneCollection.add('Bangladesh Standard Time');
-  //   _timeZoneCollection.add('Belarus Standard Time');
-  //   _timeZoneCollection.add('Canada Central Standard Time');
-  //   _timeZoneCollection.add('Cape Verde Standard Time');
-  //   _timeZoneCollection.add('Caucasus Standard Time');
-  //   _timeZoneCollection.add('Cen. Australia Standard Time');
-  //   _timeZoneCollection.add('Central America Standard Time');
-  //   _timeZoneCollection.add('Central Asia Standard Time');
-  //   _timeZoneCollection.add('Central Brazilian Standard Time');
-  //   _timeZoneCollection.add('Central Europe Standard Time');
-  //   _timeZoneCollection.add('Central European Standard Time');
-  //   _timeZoneCollection.add('Central Pacific Standard Time');
-  //   _timeZoneCollection.add('Central Standard Time');
-  //   _timeZoneCollection.add('China Standard Time');
-  //   _timeZoneCollection.add('Dateline Standard Time');
-  //   _timeZoneCollection.add('E. Africa Standard Time');
-  //   _timeZoneCollection.add('E. Australia Standard Time');
-  //   _timeZoneCollection.add('E. South America Standard Time');
-  //   _timeZoneCollection.add('Eastern Standard Time');
-  //   _timeZoneCollection.add('Egypt Standard Time');
-  //   _timeZoneCollection.add('Ekaterinburg Standard Time');
-  //   _timeZoneCollection.add('FLE Standard Time');
-  //   _timeZoneCollection.add('Fiji Standard Time');
-  //   _timeZoneCollection.add('GMT Standard Time');
-  //   _timeZoneCollection.add('GTB Standard Time');
-  //   _timeZoneCollection.add('Georgian Standard Time');
-  //   _timeZoneCollection.add('Greenland Standard Time');
-  //   _timeZoneCollection.add('Greenwich Standard Time');
-  //   _timeZoneCollection.add('Hawaiian Standard Time');
-  //   _timeZoneCollection.add('India Standard Time');
-  //   _timeZoneCollection.add('Iran Standard Time');
-  //   _timeZoneCollection.add('Israel Standard Time');
-  //   _timeZoneCollection.add('Jordan Standard Time');
-  //   _timeZoneCollection.add('Kaliningrad Standard Time');
-  //   _timeZoneCollection.add('Korea Standard Time');
-  //   _timeZoneCollection.add('Libya Standard Time');
-  //   _timeZoneCollection.add('Line Islands Standard Time');
-  //   _timeZoneCollection.add('Magadan Standard Time');
-  //   _timeZoneCollection.add('Mauritius Standard Time');
-  //   _timeZoneCollection.add('Middle East Standard Time');
-  //   _timeZoneCollection.add('Montevideo Standard Time');
-  //   _timeZoneCollection.add('Morocco Standard Time');
-  //   _timeZoneCollection.add('Mountain Standard Time');
-  //   _timeZoneCollection.add('Mountain Standard Time (Mexico)');
-  //   _timeZoneCollection.add('Myanmar Standard Time');
-  //   _timeZoneCollection.add('N. Central Asia Standard Time');
-  //   _timeZoneCollection.add('Namibia Standard Time');
-  //   _timeZoneCollection.add('Nepal Standard Time');
-  //   _timeZoneCollection.add('New Zealand Standard Time');
-  //   _timeZoneCollection.add('Newfoundland Standard Time');
-  //   _timeZoneCollection.add('North Asia East Standard Time');
-  //   _timeZoneCollection.add('North Asia Standard Time');
-  //   _timeZoneCollection.add('Pacific SA Standard Time');
-  //   _timeZoneCollection.add('Pacific Standard Time');
-  //   _timeZoneCollection.add('Pacific Standard Time (Mexico)');
-  //   _timeZoneCollection.add('Pakistan Standard Time');
-  //   _timeZoneCollection.add('Paraguay Standard Time');
-  //   _timeZoneCollection.add('Romance Standard Time');
-  //   _timeZoneCollection.add('Russia Time Zone 10');
-  //   _timeZoneCollection.add('Russia Time Zone 11');
-  //   _timeZoneCollection.add('Russia Time Zone 3');
-  //   _timeZoneCollection.add('Russian Standard Time');
-  //   _timeZoneCollection.add('SA Eastern Standard Time');
-  //   _timeZoneCollection.add('SA Pacific Standard Time');
-  //   _timeZoneCollection.add('SA Western Standard Time');
-  //   _timeZoneCollection.add('SE Asia Standard Time');
-  //   _timeZoneCollection.add('Samoa Standard Time');
-  //   _timeZoneCollection.add('Singapore Standard Time');
-  //   _timeZoneCollection.add('South Africa Standard Time');
-  //   _timeZoneCollection.add('Sri Lanka Standard Time');
-  //   _timeZoneCollection.add('Syria Standard Time');
-  //   _timeZoneCollection.add('Taipei Standard Time');
-  //   _timeZoneCollection.add('Tasmania Standard Time');
-  //   _timeZoneCollection.add('Tokyo Standard Time');
-  //   _timeZoneCollection.add('Tonga Standard Time');
-  //   _timeZoneCollection.add('Turkey Standard Time');
-  //   _timeZoneCollection.add('US Eastern Standard Time');
-  //   _timeZoneCollection.add('US Mountain Standard Time');
-  //   _timeZoneCollection.add('UTC');
-  //   _timeZoneCollection.add('UTC+12');
-  //   _timeZoneCollection.add('UTC-02');
-  //   _timeZoneCollection.add('UTC-11');
-  //   _timeZoneCollection.add('Ulaanbaatar Standard Time');
-  //   _timeZoneCollection.add('Venezuela Standard Time');
-  //   _timeZoneCollection.add('Vladivostok Standard Time');
-  //   _timeZoneCollection.add('W. Australia Standard Time');
-  //   _timeZoneCollection.add('W. Central Africa Standard Time');
-  //   _timeZoneCollection.add('W. Europe Standard Time');
-  //   _timeZoneCollection.add('West Asia Standard Time');
-  //   _timeZoneCollection.add('West Pacific Standard Time');
-  //   _timeZoneCollection.add('Yakutsk Standard Time');
-
-  //   final DateTime today = DateTime.now();
-  //   final Random random = Random();
-  //   for (int month = -1; month < 2; month++) {
-  //     for (int day = -5; day < 5; day++) {
-  //       for (int hour = 9; hour < 18; hour += 5) {
-  //         meetingCollection.add(Meeting(
-  //           from: today
-  //               .add(Duration(days: (month * 30) + day))
-  //               .add(Duration(hours: hour)),
-  //           to: today
-  //               .add(Duration(days: (month * 30) + day))
-  //               .add(Duration(hours: hour + 2)),
-  //           background: _colorCollection[random.nextInt(9)],
-  //           startTimeZone: '',
-  //           endTimeZone: '',
-  //           description: '',
-  //           isAllDay: false,
-  //           eventName: eventNameCollection[random.nextInt(7)],
-  //         ));
-  //       }
-  //     }
-  //   }
-
-  //   return meetingCollection;
-  // }
 }
 
 class DataSource extends CalendarDataSource {
